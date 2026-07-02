@@ -1,0 +1,153 @@
+﻿@{
+    ViewData["Title"] = "About Us";
+    Layout = "_Layout"; // Or your layout like _Admin.cshtml if this is part of admin panel
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f') no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+    }
+
+    .about-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 30px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .about-section {
+        margin-bottom: 30px;
+    }
+
+        .about-section h3 {
+            color: #1d4ed8;
+            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 6px;
+        }
+
+        .about-section p {
+            color: #334155;
+            line-height: 1.8;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+    .featured-books {
+        margin-top: 50px;
+    }
+
+        .featured-books h3 {
+            font-size: 24px;
+            color: #1e40af;
+            margin-bottom: 20px;
+        }
+
+    .book-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        justify-content: center;
+    }
+
+    .book-card {
+        background-color: #f9fafb;
+        padding: 15px;
+        border-radius: 12px;
+        width: 160px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .book-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+    .book-card-title {
+        font-size: 15px;
+        color: #1e293b;
+        margin-top: 10px;
+        font-weight: 600;
+    }
+
+    .btn-back-home {
+        display: inline-block;
+        margin-top: 40px;
+        padding: 12px 24px;
+        background-color: #3b82f6;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn-back-home:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+</style>
+
+<div class="about-container">
+    <div class="about-title">About Bookly</div>
+
+    <div class="about-section">
+        <h3>Our Mission</h3>
+        <p>
+            At BookBasket, our mission is to connect readers with their favorite books effortlessly.
+            Whether you're into fiction, non-fiction, programming, self-help, or mythology — we've got you covered.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h3>What We Do</h3>
+        <p>
+            BookBasket is a comprehensive online platform for book enthusiasts. We make it easy for you to browse, shop, and manage books — whether you're a casual reader or a bookstore admin.
+        </p>
+        <p>
+            Admins can manage stock, genres, and orders seamlessly, while users enjoy a smooth shopping experience with cart management, wishlists, and more.
+        </p>
+    </div>
+
+    <div class="about-section">
+        <h3>Technologies Used</h3>
+        <p>
+            This application is built with ASP.NET Core MVC, Entity Framework Core, and SQL Server for a robust and scalable experience.
+            We focus on responsive UI using modern CSS, Bootstrap, and AJAX-powered interactions.
+        </p>
+    </div>
+
+
+    <div style="text-align:center;">
+        <a href="@Url.Action("Home", "User")" class="btn-back-home">Back to Home</a>
+    </div>
+</div>

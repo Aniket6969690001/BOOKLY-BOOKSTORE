@@ -1,0 +1,163 @@
+﻿@model EBook.Models.LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General body and background */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+           background: url('/images/blurred_image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Wrapper for form */
+        .wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Registration card */
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            background: white;
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            max-width: 450px;
+            width: 400px;
+            min-height: 200px;
+            text-align: center;
+            transition: 0.3s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            margin-top: 100px;
+            margin-left: 350px;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+                background: white;
+            }
+
+        .card-header h3 {
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Form Labels */
+        .form-group label {
+            font-weight: 600;
+            color: black;
+            font-size: 14px;
+            text-align: left;
+            display: block;
+        }
+
+        /* Input Fields */
+        .form-control {
+            border: 1px solid #8D6E63;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #3E2723;
+            transition: 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: #6D4C41;
+                box-shadow: 0 0 8px rgba(109, 76, 65, 0.5);
+                background: white;
+            }
+
+        /* Register Button */
+        .btn-primary {
+            background: #006d77;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            color: white;
+            transition: 0.3s;
+        }
+
+            .btn-primary:hover {
+                background: #000000;
+                box-shadow: 0 4px 10px rgba(78, 52, 46, 0.3);
+                color: #006d77;
+                transform: scale(1.05);
+            }
+
+        /* Login Link */
+        .text-center a {
+            color: #006d77;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+            .text-center a:hover {
+                text-decoration: underline;
+            }
+
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .card {
+                max-width: 90%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="card-header">
+                <h3>Login</h3>
+            </div>
+            <div class="card-body">
+
+                <form asp-action="Login" asp-controller="Registration" method="post">
+                    <div class="form-group">
+                       
+                        <input asp-for="Email" class="form-control" type="email" required placeholder="Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        
+                        <input asp-for="Password" class="form-control" type="password" required placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Login</button>
+
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="@Url.Action("Index", "Registration")">Register here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

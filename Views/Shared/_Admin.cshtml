@@ -1,0 +1,160 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* Sidebar Styling */
+        aside {
+            width: 16rem; /* Sidebar width */
+            background-color: #457b9d; /* Sidebar color */
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh; /* Full height */
+            padding-top: 1rem;
+            overflow-y: auto; /* Enables scrolling if needed */
+        }
+
+            aside nav a {
+                display: flex;
+                align-items: center;
+                padding: 12px 24px;
+                color: white;
+                transition: background-color 0.3s ease-in-out;
+            }
+
+                aside nav a:hover {
+                    background-color: black;
+                }
+
+            aside i {
+                margin-right: 12px;
+                font-size: 1.25rem;
+            }
+
+        /* Main Content Layout */
+        .content {
+            margin-left: 16rem; /* Ensure content aligns properly */
+            width: calc(100% - 16rem);
+            min-height: 100vh;
+            background-color: #f4f6f9;
+            overflow-x: hidden;
+        }
+
+        .admin-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: black; /* Dark gray */
+        }
+
+        /* Logout Button */
+        .logout-container {
+            display: flex;
+            justify-content: flex-end; /* Aligns button to the right */
+            padding: 10px;
+        }
+
+        .logout-form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .logout-btn {
+            background: white;
+            color: black;
+            padding: 8px 18px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 1px solid black;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+            .logout-btn i {
+                margin-right: 8px;
+                color: #457b9d;
+                font-size: 18px;
+                transition: color 0.3s ease-in-out;
+            }
+
+            .logout-btn:hover {
+                background: black;
+                color: white;
+                border-color: black;
+            }
+
+                .logout-btn:hover i {
+                    color: white;
+                }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Sidebar -->
+    <aside>
+        <div class="p-4 text-white text-2xl font-bold">Bookly</div>
+        <nav class="mt-8">
+            <a class="active" href="@Url.Action("Admin", "Admin")">
+                <i class="ri-home-line"></i>
+                <span>Home</span>
+            </a>
+            <a class="active" href="@Url.Action("Order", "Admin")">
+                <i class="ri-shopping-cart-line"></i>
+                <span>Orders</span>
+            </a>
+            <a class="active" href="@Url.Action("Stock", "Admin")">
+                <i class="ri-store-line"></i>
+                <span>Stock</span>
+            </a>
+            <a class="active" href="@Url.Action("Genre", "Admin")">
+                <i class="ri-folder-line"></i>
+                <span>Genre</span>
+            </a>
+            <a class="active" href="@Url.Action("Books", "Admin")">
+                <i class="ri-book-line"></i>
+                <span>Books</span>
+            </a>
+            <a class="active" href="@Url.Action("ContactMessagesList", "Admin")">
+                <i class="ri-mail-line"></i>
+                <span>Contact</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <nav class="bg-white shadow-md p-4 flex justify-between items-center">
+            <h3 class="admin-text">Admin</h3>
+            <div class="logout-container">
+                <form action="@Url.Action("Logout", "Registration")" method="post" class="logout-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <main class="p-6">
+            @RenderBody()
+        </main>
+    </div>
+
+</body>
+</html>

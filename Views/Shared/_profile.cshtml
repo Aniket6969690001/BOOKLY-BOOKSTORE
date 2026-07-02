@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - User Dashboard</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'transparent-blue': 'rgba(69, 123, 157, 0.5)' // adjust opacity as needed
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .brand-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            font-weight: bold;
+            color: #457b9d;
+        }
+        /* Logout Button */
+        .logout-form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .logout-btn {
+            color: black;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+            border: none;
+        }
+
+            .logout-btn i {
+                margin-right: 8px;
+                color: #457b9d;
+            }
+
+            .logout-btn:hover {
+                background: #457b9d;
+                color: white;
+            }
+
+                .logout-btn:hover i {
+                    color: white;
+                }
+    </style>
+
+    <!-- Add the Google Font in <head> -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+</head>
+
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-80 bg-white shadow-lg fixed h-full p-6">
+            <!-- Increased width from w-64 to w-80 -->
+            <!-- Branding -->
+            <div class="pb-4">
+                <h1 class="brand-title">Bookly</h1>
+            </div>
+
+            <!-- Sidebar Navigation -->
+            <nav class="mt-8">
+                <ul class="space-y-3">
+                    <li>
+                        <a href="@Url.Action("UserDetails", "Profile")" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-blue-100 rounded-md">
+                            <i class="fas fa-user-edit text-green-750"></i>
+                            <span>Display Details</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Editprofile", "Profile")" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-blue-100 rounded-md">
+                            <i class="fas fa-info-circle text-green-750"></i>
+                            <span>Edit Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("PurchaseHistory", "Profile")" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-blue-100 rounded-md">
+                            <i class="fas fa-history text-green-750"></i>
+                            <span>Purchase History</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="@Url.Action("Home", "User")" class="flex items-center space-x-2 py-2 px-4 text-gray-700 hover:bg-blue-100 rounded-md">
+                            <i class="fas fa-home text-green-750"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="ml-80 w-full">
+            <!-- Adjusted margin from ml-64 to ml-80 -->
+            <!-- Navbar with Back Button (Transparent Green) -->
+            <nav class="bg-transparent-green shadow-md p-4 flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-800">User</h2>
+                <form action="@Url.Action("Logout", "Registration")" method="post" class="logout-form">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </nav>
+
+            <!-- Page Content (Transparent Green Background) -->
+            <div class="p-6 bg-transparent-blue min-h-screen">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</body>
+</html>

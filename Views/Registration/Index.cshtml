@@ -1,0 +1,151 @@
+﻿@model EBook.Models.RegistrationViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: url('/images/blurred_image.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            background: white;
+            padding: 25px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .card-header h3 {
+            font-weight: bold;
+            font-family: 'Segoe UI', cursive;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            .form-control:focus {
+                border-color: #006d77;
+                box-shadow: 0 0 5px rgba(0, 109, 119, 0.5);
+            }
+
+        .btn-primary {
+            background: #006d77;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+            .btn-primary:hover {
+                background: #000000;
+                color: #006d77;
+                transform: scale(1.05);
+            }
+
+        .text-center a {
+            color: #006d77;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 20px;
+        }
+
+        @@media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <div class="card-header text-center mb-4">
+                <h3>User Registration</h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Index" asp-controller="Registration" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <input asp-for="FullName" class="form-control" placeholder="Enter Full Name" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input asp-for="Address" class="form-control" placeholder="Enter Address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input asp-for="Mobile"
+                                   class="form-control"
+                                   placeholder="Enter Mobile Number"
+                                   pattern="\d{10}"
+                                   maxlength="10"
+                                   inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                   required />
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input asp-for="Username" class="form-control" placeholder="Enter Username" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Enter Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input asp-for="Pincode"
+                                   class="form-control"
+                                   placeholder="Enter Post/Zip Code"
+                                   pattern="\d{10}"
+                                   maxlength="6"
+                                   inputmode="numeric"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                   required />
+                            <span asp-validation-for="Pincode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter Password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+
+                    <div class="text-center mt-3">
+                        <p>Already registered? <a href="@Url.Action("Login", "Registration")">Login here..</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

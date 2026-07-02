@@ -1,0 +1,1063 @@
+﻿@using System.Web
+@using System.Collections.Generic
+@model IEnumerable<EBook.Model.Book>
+<!-- css styles -->
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    /* custom css */
+    #billboard {
+        margin-top: 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .video-background {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: -1;
+        opacity: 0.15;
+    }
+
+    .book-card {
+        transition: transform 0.3s ease;
+        border-radius: 1rem !important;
+        overflow: hidden;
+        min-height: 500px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: none;
+        position: relative;
+    }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .book-image {
+        background: rgba(248, 249, 250, 0.4);
+        height: 100%;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        backdrop-filter: blur(2px);
+    }
+
+    .book-content {
+        padding: 3rem 2rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: 1rem 0 0 1rem;
+    }
+
+    .book-description {
+        color: #000000;
+        line-height: 1.6;
+        font-size: 1.1rem;
+        margin: 1.5rem 0;
+        flex: 1;
+    }
+
+    .button-group {
+        margin-top: auto;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .author-text {
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+
+    @@media (max-width: 768px) {
+        #billboard {
+            margin-top: 60px;
+        }
+
+        .book-card {
+            min-height: auto;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .book-image {
+            min-height: 300px;
+            padding: 1.5rem !important;
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .book-content {
+            padding: 2rem 1.5rem !important;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .book-title {
+            font-size: 2rem !important;
+        }
+
+        .video-background {
+            opacity: 0.1;
+        }
+    }
+
+    .best-book-card:hover {
+        transform: translateY(-5px);
+        transition: 0.3s ease;
+    }
+
+    .best-selling-section {
+        background: linear-gradient(to right, #f8f9fa, #ffffff);
+    }
+
+    .best-selling__container,
+    .best-selling__container-all {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+    }
+
+    .best-selling__card {
+        background-color: #f9f9f9;
+        padding: 1rem;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 420px;
+    }
+
+    .book-img-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .best-selling__img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .book-hover-icons {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .book-img-container:hover .book-hover-icons {
+        opacity: 1;
+    }
+
+    .icon-btn {
+        background-color: #ff6b81;
+        border: none;
+        border-radius: 50%;
+        padding: 10px;
+        color: white;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        position: relative;
+    }
+
+        .icon-btn.wishlist {
+            background-color: #2f2f2f;
+        }
+
+    .best-selling__title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 0.5rem;
+    }
+
+    .best-selling__author {
+        color: gray;
+        display: block;
+        margin-top: 0.3rem;
+    }
+
+    .best-selling__price {
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+        color: #e53935;
+    }
+
+    .view-more-btn {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+        .view-more-btn button {
+            padding: 0.5rem 2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+    .d-none {
+        display: none;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #333;
+    }
+
+    /* hide scroll bar cross-browser */
+    .scroll-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 1rem 0;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+    }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+    .best-selling__card {
+        scroll-snap-align: start;
+        width: 210px;
+        height: 210px;
+        background: #fff;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+        flex: 0 0 auto;
+        overflow: hidden;
+    }
+
+        .best-selling__card:hover {
+            transform: translateY(-5px);
+        }
+
+    .book-img-container img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* scroll container */
+    .scroll-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .scroll-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        gap: 1.5rem;
+        padding: 1rem 2rem;
+    }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #fff;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0.6rem;
+        z-index: 10;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        color: #555;
+        transition: background 0.3s;
+    }
+
+        .scroll-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .scroll-btn.left {
+            left: 0;
+        }
+
+        .scroll-btn.right {
+            right: 0;
+        }
+
+    .best-selling__price {
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+        color: black;
+    }
+
+    .best-selling-card {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;
+        margin: 3rem auto;
+    }
+
+        .best-selling-card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .icon-btn {
+        position: relative;
+    }
+
+    .cart-count-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: red;
+        color: white;
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 50%;
+        display: none;
+    }
+
+    /* responsive adjustments */
+    @@media (max-width: 1200px) {
+        .scroll-container {
+            padding: 1rem;
+            gap: 1rem;
+        }
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .modal-footer {
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    #bookDetailsModal .modal-content {
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        background: #ffffff;
+        border: none;
+    }
+
+    #bookDetailsModal .modal-header {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    #bookDetailsModal .modal-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    #bookDetailsModal .btn-close {
+        background-color: #ccc;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        opacity: 1;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+        #bookDetailsModal .btn-close:hover {
+            background-color: #999;
+        }
+
+    #bookDetailsModal .modal-body {
+        padding-top: 0;
+    }
+
+    #bookDetailsModal img#modalBookImage {
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        max-height: 300px;
+        object-fit: cover;
+    }
+
+    #bookDetailsModal h2#modalBookName {
+        font-size: 1.75rem;
+        color: #222;
+    }
+
+    #bookDetailsModal .book-description {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    #bookDetailsModal p {
+        font-size: 1.05rem;
+        color: #444;
+    }
+
+    #bookDetailsModal .button-group .btn {
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    #bookDetailsModal .btn-primary {
+        background: linear-gradient(135deg, #4f46e5, #3b82f6);
+        border: none;
+        font-weight: 600;
+    }
+
+        #bookDetailsModal .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+</style>
+
+@{
+    var random = new Random();
+    var bookList = Model?.ToList();
+    var selectedBook = bookList?.Count > 0
+        ? bookList[random.Next(bookList.Count)]
+        : null;
+
+    var fileName = selectedBook?.Image?.Trim() ?? "";
+    var safeFileName = Uri.EscapeUriString(fileName).Replace(" ", "%20");
+    var imagePath = !string.IsNullOrWhiteSpace(fileName)
+        ? Url.Content($"~/Images/{safeFileName}")
+        : Url.Content("~/Images/default.jpg");
+    var bestSellingBooks = ViewData["BestSellingBooks"] as List<EBook.Model.Book>;
+    var recommendedBooks = bookList?.Where(b => b.IsRecommended == true).ToList();
+}
+
+@if (selectedBook != null)
+{
+    <section id="billboard" class="py-5">
+        <div class="container">
+            <div class="book-card card">
+                <div class="row g-0 h-100">
+                    <div class="col-md-7 d-flex flex-column">
+                        <div class="book-content">
+                            <h2 class="book-title display-5 fw-bold mb-3 text-dark">@selectedBook.BookName</h2>
+                            <div class="book-description">@selectedBook.Description</div>
+                            <div class="button-group d-flex gap-3 flex-wrap justify-content-center">
+                                <a href="@Url.Content($"~/pdfs/{selectedBook.SoftCopy}")" class="btn btn-primary btn-lg px-4 py-2" target="_blank">Read More</a>
+                                <button class="btn btn-outline-dark btn-lg px-4 py-2" onclick="addToCart(@selectedBook.Id)">Add To Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="book-image">
+                            <img src="@imagePath" class="img-fluid" alt="Cover of @selectedBook.BookName"
+                                 style="max-height: 500px; object-fit: contain; cursor: pointer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <div class="text-center py-5 mt-5">
+        <div class="alert alert-warning" role="alert">
+            No books available in our collection
+        </div>
+    </div>
+}
+
+<!-- BestSelling Books -->
+@if (bestSellingBooks != null && bestSellingBooks.Any())
+{
+    <div class="best-selling-card">
+        <section class="best-selling section" id="best-selling">
+            <h2 class="section-title">Best Selling Books</h2>
+
+            <div class="scroll-wrapper">
+                <button class="scroll-btn left" onclick="scrollBooks('left')">&#10094;</button>
+
+                <div class="scroll-container" id="bookScrollContainer">
+                    @foreach (var item in bestSellingBooks)
+                    {
+                        var imgPath = !string.IsNullOrWhiteSpace(item.Image)
+                        ? Url.Content($"~/Images/{Uri.EscapeUriString(item.Image)}")
+                        : Url.Content("~/Images/default.jpg");
+                        <article class="best-selling__card">
+                            <div class="book-img-container" onclick="event.stopPropagation(); showBookDetailsBestSelling('@item.BookName', '@item.AuthorName', '@HttpUtility.JavaScriptStringEncode(item.Description)', @item.Price, '@imgPath', @item.Id, '@item.SoftCopy')">
+                                <img src="@imgPath" class="best-selling__img" alt="@item.BookName" />
+                                <div class="book-hover-icons">
+                                    <button class="icon-btn add-to-cart" data-book-id="@item.Id" title="Add to Cart" onclick="event.stopPropagation(); addToCart(@item.Id)">
+                                        <i class='bx bx-cart-alt'></i>
+                                    </button>
+
+                                    <button class="icon-btn wishlist" title="Add to Wishlist"
+                                            onclick="event.stopPropagation(); addToWishlist(@item.Id)">
+                                        <i class='bx bx-heart'></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="best-selling__title">@item.BookName</div>
+                            <div class="best-selling__author">@item.AuthorName</div>
+                            <div class="best-selling__price">₹@item.Price</div>
+                        </article>
+                    }
+                </div>
+
+                <button class="scroll-btn right" onclick="scrollBooks('right')">&#10095;</button>
+            </div>
+        </section>
+    </div>
+}
+else
+{
+    <div class="text-center my-5">
+        <p class="text-muted">No best selling books available at the moment.</p>
+    </div>
+}
+
+<!-- Recommended Books -->
+@if (recommendedBooks != null && recommendedBooks.Any())
+{
+    <div class="best-selling-card recommended">
+        <section class="best-selling section" id="recommended-books">
+            <h2 class="section-title">Recommended Books</h2>
+
+            <div class="scroll-wrapper">
+                <button class="scroll-btn left" onclick="scrollBooks1('left')">&#10094;</button>
+
+                <div class="scroll-container" id="recommendedScrollContainer">
+                    @foreach (var item in recommendedBooks)
+                    {
+                        var imgPath = !string.IsNullOrWhiteSpace(item.Image)
+                        ? Url.Content($"~/Images/{Uri.EscapeUriString(item.Image)}")
+                        : Url.Content("~/Images/default.jpg");
+                        <article class="best-selling__card">
+                            <div class="book-img-container" onclick="event.stopPropagation();showBookDetailsRecommendedBooks('@item.BookName', '@item.AuthorName', '@HttpUtility.JavaScriptStringEncode(item.Description)', @item.Price, '@imgPath', @item.Id, '@item.SoftCopy')">
+
+                                <img src="@imgPath" class="best-selling__img" alt="@item.BookName" />
+                                <div class="book-hover-icons">
+                                    <button class="icon-btn add-to-cart add-to-cart-btn" data-id="@item.Id" title="Add to Cart" onclick="event.stopPropagation(); addToCart(@item.Id)">
+                                        <i class='bx bx-cart-alt'></i>
+                                    </button>
+
+                                    <button class="icon-btn wishlist" title="Add to Wishlist"
+                                            onclick="event.stopPropagation(); addToWishlist(@item.Id)">
+                                        <i class='bx bx-heart'></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <h3 class="best-selling__title">@item.BookName</h3>
+                            <span class="best-selling__author">@item.AuthorName</span>
+                            <div class="best-selling__price">₹@item.Price</div>
+                        </article>
+                    }
+                </div>
+
+                <button class="scroll-btn right" onclick="scrollBooks1('right')">&#10095;</button>
+            </div>
+        </section>
+    </div>
+}
+
+<!-- Latest Books -->
+<div class="best-selling-card latest">
+    <section class="best-selling section" id="latest-books">
+        <h2 class="section-title">Latest Books</h2>
+
+        <div class="scroll-wrapper">
+            <div class="scroll-container" id="latestScrollContainer">
+                @{
+                    var latestBooks = Model.OrderByDescending(b => b.Id).Take(5).ToList();
+                }
+
+                @foreach (var item in latestBooks)
+                {
+                    var imgPath = !string.IsNullOrWhiteSpace(item.Image)
+                    ? Url.Content($"~/Images/{Uri.EscapeUriString(item.Image)}")
+                    : Url.Content("~/Images/default.jpg");
+                    <article class="best-selling__card latest">
+                        <div class="book-img-container" onclick="event.stopPropagation(); showBookDetailsLatestBooks('@item.BookName', '@item.AuthorName', '@HttpUtility.JavaScriptStringEncode(item.Description)', @item.Price, '@imgPath', @item.Id, '@item.SoftCopy')">
+                            <img src="@imgPath" class="best-selling__img" alt="@item.BookName" />
+                            <div class="book-hover-icons">
+                                <button class="icon-btn add-to-cart" data-book-id="@item.Id" title="Add to Cart"
+                                        onclick="event.stopPropagation(); addToCart(@item.Id)">
+                                    <i class='bx bx-cart-alt'></i>
+                                </button>
+                                <button class="icon-btn wishlist" title="Add to Wishlist"
+                                        onclick="event.stopPropagation(); addToWishlist(@item.Id)">
+                                    <i class='bx bx-heart'></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <h3 class="best-selling__title">@item.BookName</h3>
+                        <span class="best-selling__author">@item.AuthorName</span>
+                        <div class="best-selling__price">₹@item.Price</div>
+                    </article>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Book Details Modal -->
+<div class="modal fade" id="bookDetailsModal" tabindex="-1" aria-labelledby="bookDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookDetailsModalLabel">Book Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body d-flex flex-column flex-md-row gap-4">
+                <img id="modalBookImage" src="/images/default-book.png" alt="Book Image" class="img-fluid rounded"
+                     style="max-width: 200px; height: auto; object-fit: cover;" />
+                <div class="w-100">
+                    <h2 id="modalBookName" class="display-5 fw-bold mb-3 text-dark"></h2>
+                    <p><strong>Author:</strong> <span id="modalAuthorName"></span></p>
+                    <p><strong>Description:</strong> <span id="modalBookDescription" class="book-description"></span></p>
+                    <p><strong>Price:</strong> ₹<span id="modalBookPrice"></span></p>
+                </div>
+            </div>
+
+            <div class="modal-footer d-flex justify-content-between flex-wrap gap-2">
+                <button id="modalReadMoreButton"
+                        class="btn btn-primary fw-semibold px-4 py-2" onclick="openPdf()">
+                    <i class="bi bi-book-half"></i> Read PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+         
+
+        // Global error handler
+        function showError(message) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: message,
+                confirmButtonText: "OK"
+            });
+        }
+
+    function openPdf() {
+        if (!window.currentPdfPath) {
+            alert("No PDF available for this book.");
+            return;
+        }
+
+        window.open('/pdfs/' + encodeURIComponent(window.currentPdfPath), '_blank');
+    }
+
+
+    // Global variables
+    let bookModal;
+    let currentBookId = null;
+
+    // Document ready function
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM fully loaded and initialized");
+
+        // Initialize Bootstrap Modal
+        bookModal = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
+
+        // Initialize tooltips
+        initializeTooltips();
+
+        // Setup all event listeners
+        setupEventListeners();
+    });
+
+    // Initialize tooltips
+    function initializeTooltips() {
+        try {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        } catch (error) {
+            console.error("Error initializing tooltips:", error);
+        }
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        // Book container hover effects
+        document.querySelectorAll('.book-img-container').forEach(container => {
+            container.style.cursor = 'pointer';
+        });
+
+        // Modal button event listeners
+        document.getElementById('modalAddToCartBtn')?.addEventListener('click', handleAddToCartClick);
+        document.getElementById('modalBuyNowBtn')?.addEventListener('click', handleBuyNowClick);
+    }
+
+    // Handle Add to Cart button click
+    function handleAddToCartClick() {
+        if (!currentBookId) {
+            showError("No book selected");
+            return;
+        }
+        addToCart(currentBookId);
+    }
+
+    // Handle Buy Now button click
+    function handleBuyNowClick() {
+        if (!currentBookId) {
+            showError("No book selected");
+            return;
+        }
+        buyNow(currentBookId);
+    }
+
+    // Show book details in modal
+       function showBookDetailsRecommendedBooks(name, author, description, price, imagePath, bookId, softCopyPath) {
+        try {
+            if (!bookId) {
+                showError("Invalid book ID");
+                return;
+            }
+
+            currentBookId = bookId;
+
+            // Update modal content
+            updateModalContent(name, author, description, price, imagePath);
+
+            // Store PDF path globally
+            window.currentPdfPath = softCopyPath;
+
+            // Show modal
+            bookModal.show();
+        } catch (error) {
+            console.error("Error showing book details:", error);
+            showError("Could not display book details. Please try again.");
+        }
+    }
+
+    function showBookDetailsLatestBooks(name, author, description, price, imagePath, bookId,softCopyPath) {
+       try {
+            if (!bookId) {
+                showError("Invalid book ID");
+                return;
+            }
+
+            currentBookId = bookId;
+
+            // Update modal content
+            updateModalContent(name, author, description, price, imagePath);
+
+            // Store PDF path globally
+            window.currentPdfPath = softCopyPath;
+
+            // Show modal
+            bookModal.show();
+        } catch (error) {
+            console.error("Error showing book details:", error);
+            showError("Could not display book details. Please try again.");
+        }
+    }
+
+
+    function showBookDetailsBestSelling(name, author, description, price, imagePath, bookId,softCopyPath) {
+        try {
+            if (!bookId) {
+                showError("Invalid book ID");
+                return;
+            }
+
+            currentBookId = bookId;
+
+            // Update modal content
+            updateModalContent(name, author, description, price, imagePath);
+
+            // Store PDF path globally
+            window.currentPdfPath = softCopyPath;
+
+            // Show modal
+            bookModal.show();
+        } catch (error) {
+            console.error("Error showing book details:", error);
+            showError("Could not display book details. Please try again.");
+        }
+    }
+
+
+    // Update modal content
+    function updateModalContent(name, author, description, price, imagePath) {
+        // Set text content
+        document.getElementById('modalBookName').textContent = name || "Unknown Book";
+        document.getElementById('modalAuthorName').textContent = author || "Unknown Author";
+        document.getElementById('modalBookDescription').textContent = description || "No description available";
+        document.getElementById('modalBookPrice').textContent = price || "0";
+        
+        // Set image with error handling
+        const img = document.getElementById('modalBookImage');
+        if (imagePath) {
+            img.src = imagePath;
+        } else {
+            img.src = '/Images/default.jpg';
+        }
+        img.alt = name || "Book Cover";
+
+        img.onerror = function() {
+            this.src = '/Images/default.jpg';
+        };
+    }
+
+    // Fetch additional book details
+    function fetchBookDetails(bookId) {
+        if (!bookId) return;
+
+        $.ajax({
+            url: '/User/GetBookDetails',
+            type: 'GET',
+            data: { id: bookId },
+            dataType: 'json',
+            success: function(bookDetails) {
+                updateReadMoreLink(bookDetails);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching book details:", error);
+                document.getElementById('modalReadMoreLink').style.display = "none";
+            }
+        });
+    }
+
+    // Update Read More link
+    function updateReadMoreLink(bookDetails) {
+        const readMoreLink = document.getElementById('modalReadMoreLink');
+        if (bookDetails?.softCopy) {
+            readMoreLink.href = '/pdfs/' + encodeURIComponent(bookDetails.softCopy);
+            readMoreLink.style.display = "inline-block";
+        } else {
+            readMoreLink.style.display = "none";
+        }
+    }
+
+    // Add to cart function
+    function addToCart(bookId) {
+        if (!bookId) {
+            showError("No book selected");
+            return;
+        }
+
+        $.ajax({
+            url: '/User/AddToCart',
+            type: 'POST',
+            data: { id: bookId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    updateCartCount(response.cartCount);
+                    showSuccess("Item added to cart!");
+                    bookModal.hide();
+                } else {
+                    showLoginRequired(response.message);
+                }
+            },
+            error: handleAjaxError
+        });
+    }
+
+    // Buy Now function
+    function buyNow(bookId) {
+        if (!bookId) {
+            showError("No book selected");
+            return;
+        }
+
+        $.ajax({
+            url: '/User/AddToCart',
+            type: 'POST',
+            data: { id: bookId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    updateCartCount(response.cartCount);
+                    window.location.href = '/User/Checkout';
+                } else {
+                    showLoginRequired(response.message);
+                }
+            },
+            error: handleAjaxError
+        });
+    }
+
+    // Add to wishlist
+    function addToWishlist(bookId) {
+        if (!bookId) return;
+
+        $.ajax({
+            url: '/User/AddToWishlist',
+            type: 'POST',
+            data: { id: bookId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    updateWishlistCount(response.wishlistCount);
+                    updateWishlistButton(bookId);
+                    showSuccess("Added to Wishlist!");
+                } else {
+                    showLoginRequired(response.message);
+                }
+            },
+            error: handleAjaxError
+        });
+    }
+
+    // Update cart count
+    function updateCartCount(count) {
+        const counter = document.getElementById('miniCartCount');
+        if (counter) {
+            counter.textContent = count;
+            animateElement(counter, 'animate__bounceIn');
+        }
+    }
+
+    // Update wishlist count
+    function updateWishlistCount(count) {
+        const counter = document.getElementById('miniWishlistCount');
+        if (counter) {
+            counter.textContent = count;
+        }
+    }
+
+    // Update wishlist button appearance
+    function updateWishlistButton(bookId) {
+        const btn = document.querySelector(`.wishlist[onclick*="${bookId}"]`);
+        if (!btn) return;
+
+        const icon = btn.querySelector('i');
+        if (icon) {
+            icon.classList.replace('bx-heart', 'bxs-heart');
+            icon.style.color = '#ff6b81';
+        }
+    }
+
+    // Show success message
+    function showSuccess(message) {
+        Swal.fire({
+            icon: "success",
+            title: message,
+            timer: 1500,
+            showConfirmButton: false
+        });
+    }
+
+    // Show error message
+    function showError(message) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: message,
+            confirmButtonText: "OK"
+        });
+    }
+
+    // Show login required message
+    function showLoginRequired(message) {
+        Swal.fire({
+            icon: "warning",
+            title: "Login Required",
+            text: message || "You need to log in to perform this action.",
+            showCancelButton: true,
+            confirmButtonText: "Login Now"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/Registration/Login";
+            }
+        });
+    }
+
+    // Handle AJAX errors
+    function handleAjaxError(xhr, status, error) {
+        console.error("AJAX Error:", error);
+        showError("Something went wrong. Please try again later.");
+    }
+
+    // Animate element
+    function animateElement(element, animation) {
+        if (!element) return;
+
+        element.classList.add('animate__animated', animation);
+        setTimeout(() => {
+            element.classList.remove('animate__animated', animation);
+        }, 1000);
+    }
+
+    // Scroll functions
+    function scrollBooks(direction) { 
+        scrollContainer('bookScrollContainer', direction);
+    }
+
+    function scrollBooks1(direction) {
+        scrollContainer('recommendedScrollContainer', direction);
+    }
+
+    function scrollBooks2(direction) {
+        scrollContainer('latestScrollContainer', direction);
+    }
+
+    // Generic scroll container function
+    function scrollContainer(containerId, direction) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const scrollAmount = 300;
+        container.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+</script>

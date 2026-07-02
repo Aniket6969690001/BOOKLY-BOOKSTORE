@@ -1,0 +1,258 @@
+﻿@model IEnumerable<EBook.Models.OrderWithBookViewModel>
+@{
+    ViewData["Title"] = "Your Purchase History";
+    Layout = "~/Views/Shared/_Profile.cshtml";
+}
+
+<style>
+    /* White table with column hover effects */
+    .purchase-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .purchase-title {
+        margin: 20px 0;
+        color: #333;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .purchase-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+    }
+
+        .purchase-table th {
+            background-color: #fff;
+            color: #555;
+            font-weight: 600;
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #e9ecef;
+            position: relative;
+        }
+
+        .purchase-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+            position: relative;
+        }
+
+            /* Column hover effect */
+            .purchase-table td:hover::after,
+            .purchase-table th:hover::after {
+                content: "";
+                position: absolute;
+                background-color: rgba(0, 0, 0, 0.05);
+                left: 0;
+                top: 0;
+                height: 10000px;
+                width: 100%;
+                z-index: 0;
+                pointer-events: none;
+            }
+
+            /* Content should appear above the hover effect */
+            .purchase-table td > *,
+            .purchase-table th > * {
+                position: relative;
+                z-index: 1;
+            }
+
+        .purchase-table tr:last-child td {
+            border-bottom: none;
+        }
+
+    .order-date {
+        color: #555;
+        white-space: nowrap;
+    }
+
+    .order-status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .status-completed {
+        background-color: #dff5e5;
+        color: #28a745;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .book-img {
+        width: 50px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-title {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .genre-label {
+        display: inline-block;
+        background-color: #f0f0f0;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        color: #666;
+        white-space: nowrap;
+    }
+
+    .price-cell, .total-cell {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .total-cell {
+        font-weight: 600;
+    }
+
+    .order-row td {
+        background-color: #fff;
+        border-top: 2px solid #e9ecef;
+        font-weight: 500;
+    }
+
+    /* First order row doesn't need top border */
+    .purchase-table tbody tr:first-child.order-row td {
+        border-top: none;
+    }
+
+    .no-orders {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        color: #666;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    /* Responsive styles */
+    @@media (max-width: 768px) {
+        .purchase-table
+
+    {
+        font-size: 14px;
+    }
+
+    .purchase-table td,
+    .purchase-table th {
+        padding: 10px;
+    }
+
+    .book-img {
+        width: 40px;
+        height: 55px;
+    }
+
+    }
+</style>
+
+<div class="purchase-container">
+    <h2 class="purchase-title">Your Purchase History</h2>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info">@ViewBag.Message</div>
+    }
+
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="purchase-table">
+            <thead>
+                <tr>
+                    <th>Order Date</th>
+                    <th>Status</th>
+                    <th>Book</th>
+                    <th>Genre</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr class="order-row">
+                        <td class="order-date">@order.CreateDate.ToString("dd-MM-yyyy")</td>
+                        <td>
+                            <span class="order-status @(order.IsOrderStatus ? "status-completed" : "status-pending")">
+                                @(order.IsOrderStatus ? "Completed" : "Pending")
+                            </span>
+                        </td>
+                        <td colspan="3"></td>
+                        
+                    </tr>
+
+                    @foreach (var book in order.Books)
+                    {
+                        <tr>
+                            <td></td>
+                            <td><img src="~/Images/@book.Image" class="book-img" alt="@book.BookTitle" /></td>
+                            <td class="book-title">@book.BookTitle</td>
+                            <td><span class="genre-label">@book.Genre</span></td>
+                            <td class="price-cell">@($"₹{book.UnitPrice} × {book.Quantity}")</td>
+                            <td class="total-cell">₹@book.TotalPrice.ToString("0.00")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="no-orders">
+            You haven't made any purchases yet.
+        </div>
+    }
+</div>
+
+<script>
+    // This adds the responsive column highlight effect
+    document.addEventListener('DOMContentLoaded', function() {
+        const table = document.querySelector('.purchase-table');
+
+        if (table) {
+            const cells = table.querySelectorAll('th, td');
+
+            cells.forEach(cell => {
+                cell.addEventListener('mouseenter', function() {
+                    const index = Array.from(this.parentNode.children).indexOf(this);
+
+                    table.querySelectorAll('tr').forEach(row => {
+                        if (row.children[index]) {
+                            row.children[index].classList.add('hover-highlight');
+                        }
+                    });
+                });
+
+                cell.addEventListener('mouseleave', function() {
+                    table.querySelectorAll('.hover-highlight').forEach(highlightedCell => {
+                        highlightedCell.classList.remove('hover-highlight');
+                    });
+                });
+            });
+        }
+    });
+</script>

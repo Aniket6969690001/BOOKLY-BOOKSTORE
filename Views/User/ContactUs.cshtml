@@ -1,0 +1,292 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+    Layout = "_Layout"; // Or your layout like _Admin.cshtml if this is part of admin panel
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f') no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+    }
+
+    .contact-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-title {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 30px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .contact-section {
+        margin-bottom: 30px;
+    }
+
+    .contact-section h3 {
+        color: #1d4ed8;
+        margin-bottom: 12px;
+        font-size: 22px;
+        font-weight: 700;
+        border-bottom: 2px solid #3b82f6;
+        padding-bottom: 6px;
+    }
+
+    .contact-section p {
+        color: #334155;
+        line-height: 1.8;
+        font-size: 17px;
+        margin-bottom: 10px;
+    }
+
+    .contact-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .contact-item {
+        flex: 1;
+        min-width: 250px;
+        padding: 20px;
+        background-color: #f9fafb;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .contact-item i {
+        font-size: 32px;
+        color: #3b82f6;
+        margin-bottom: 15px;
+    }
+
+    .contact-item h4 {
+        color: #1e293b;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .contact-item p {
+        color: #334155;
+        font-size: 16px;
+    }
+
+    .contact-form {
+        background-color: #f9fafb;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .btn-submit {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #3b82f6;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-submit:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    .map-container {
+        margin-top: 40px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        height: 300px;
+    }
+    
+    .btn-back-home {
+        display: inline-block;
+        margin-top: 40px;
+        padding: 12px 24px;
+        background-color: #3b82f6;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn-back-home:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    /* Add FontAwesome icons styling */
+    .fas {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        background-color: #e0f2fe;
+        border-radius: 50%;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="contact-container">
+    <div class="contact-title">Contact Us</div>
+
+    <div class="contact-section">
+        <h3>Get In Touch</h3>
+        <p>
+            Have questions about our services, book availability, or need assistance with your order? 
+            We're here to help! Reach out to our friendly team using any of the methods below.
+        </p>
+    </div>
+
+    <div class="contact-info">
+        <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <h4>Our Location</h4>
+            <p>123 Book Street</p>
+            <p>Literary Lane, Bookville</p>
+            <p>BK 12345</p>
+        </div>
+        
+        <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <h4>Phone Number</h4>
+            <p>+1 (555) 123-4567</p>
+            <p>Mon - Fri: 9am - 6pm</p>
+        </div>
+        
+        <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <h4>Email Address</h4>
+            <p>info@bookly.com</p>
+            <p>support@bookly.com</p>
+        </div>
+    </div>
+
+    <div class="contact-section">
+        <h3>Send Us A Message</h3>
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Success"]
+            </div>
+        }
+
+        <div class="contact-form">
+            <form method="post" asp-controller="User" asp-action="ContactUs">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" class="form-control" id="subject" name="subject" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea class="form-control" id="message" name="message" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="contact-section">
+        <h3>Visit Our Store</h3>
+        <div class="map-container">
+            <!-- Replace with your actual Google Maps embed code -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00425878428698!3d40.71312797933185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a23e28c1191%3A0x49f75d3281df052a!2sBroadway%2C%20New%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1651234567890!5m2!1sen!2s" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <div style="text-align:center;">
+        <a href="@Url.Action("Home", "User")" class="btn-back-home">Back to Home</a>
+    </div>
+</div>
+
+<!-- Add FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Optional JavaScript for form validation -->
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        // Basic form validation can be added here
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        if (name.trim() === '' || email.trim() === '' || subject.trim() === '' || message.trim() === '') {
+            alert('Please fill in all fields');
+            event.preventDefault();
+        }
+    });
+</script>

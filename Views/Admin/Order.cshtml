@@ -1,0 +1,168 @@
+﻿@model List<EBook.Model.Order>
+@{
+    ViewData["Title"] = "Order List";
+    Layout = "_Admin";
+}
+
+@Html.AntiForgeryToken()
+
+<style>
+    .order-container {
+        margin: 20px 0;
+    }
+
+    .order-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+        .order-table th {
+            background-color: #f2f2f2;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .order-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+    .status-pending {
+        color: #ff9800;
+        font-weight: bold;
+    }
+
+    .status-completed {
+        color: #2196f3;
+        font-weight: bold;
+    }
+
+    .payment-status {
+        font-weight: bold;
+    }
+
+    .payment-paid {
+        color: #4caf50;
+    }
+
+    .payment-unpaid {
+        color: #f44336;
+    }
+
+    .no-orders {
+        padding: 20px;
+        text-align: center;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        color: #666;
+        font-style: italic;
+    }
+</style>
+
+<div class="order-container">
+    <h1 class="order-heading">Order List</h1>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <table class="order-table" id="orderTable">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Book</th>
+                    <th>Payment</th>
+                    <th>Paid</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    var timestamp = order.CreateDate.ToUniversalTime().ToString("o");
+                    <tr data-order-time="@timestamp" data-order-id="@order.Id">
+                        <td>@order.Registration?.FullName</td>
+                        <td>@order.Books?.BookName</td>
+
+                        <td>@order.PaymentMethod</td>
+                        <td class="payment-status @(order.IsPaid ? "payment-paid" : "payment-unpaid")">
+                            @(order.IsPaid ? "Paid" : "Unpaid")
+                        </td>
+                        <td class="order-status @(order.IsOrderStatus ? "status-completed" : "status-pending")">
+                            @(order.IsOrderStatus ? "Completed" : "Pending")
+                        </td>
+                        <td>@order.CreateDate.ToString("dd-MMM-yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="no-orders">
+            No orders found.
+        </div>
+    }
+</div>
+
+<script>
+    function updateOrderStatuses() {
+        const now = new Date();
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        document.querySelectorAll("#orderTable tbody tr").forEach(row => {
+            const orderTimeStr = row.getAttribute("data-order-time");
+            const orderId = row.getAttribute("data-order-id");
+            const orderTime = new Date(orderTimeStr);
+            const minutesElapsed = (now - orderTime) / 60000;
+
+            const paidCell = row.querySelector(".payment-status");
+            const statusCell = row.querySelector(".order-status");
+
+            if (minutesElapsed > 1 &&
+                paidCell.innerText.trim() === "Unpaid" &&
+                statusCell.innerText.trim() === "Pending") {
+
+                // Update frontend
+                paidCell.classList.remove("payment-unpaid");
+                paidCell.classList.add("payment-paid");
+                paidCell.innerText = "Paid";
+
+                statusCell.classList.remove("status-pending");
+                statusCell.classList.add("status-completed");
+                statusCell.innerText = "Completed";
+
+                // Send update to backend
+                fetch('/Admin/UpdateOrderStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    },
+                    body: JSON.stringify({ orderId: parseInt(orderId), status: "Completed" })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error("Failed to update order status in DB.");
+                    }
+                });
+            }
+        });
+    }
+
+    setInterval(updateOrderStatuses, 1000);
+    window.addEventListener('DOMContentLoaded', updateOrderStatuses);
+</script>

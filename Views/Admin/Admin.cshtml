@@ -1,0 +1,131 @@
+﻿@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.2.0/remixicon.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 80%;
+            max-width: 900px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between; /* Move icon to the right */
+            align-items: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .card-icon {
+            font-size: 30px;
+            color: #007bff;
+        }
+
+        .card-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .card-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        @@media (max-width: 768px) {
+            .container
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href='@Url.Action("Order", "Admin")' class="text-decoration-none">
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-title">Total Order</p>
+                    <h3 class="card-number">@ViewBag.OrderCount</h3>
+                </div>
+                <i class="ri-shopping-cart-2-line card-icon"></i>
+            </div>
+        </a>
+
+        <a href='@Url.Action("Books", "Admin")' class="text-decoration-none">
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-title">Total Books</p>
+                    <h3 class="card-number">@ViewBag.BookCount</h3>
+                </div>
+                <i class="ri-book-line card-icon"></i>
+            </div>
+        </a>
+
+        <a href='@Url.Action("Genre", "Admin")' class="text-decoration-none">
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-title">Total Genre</p>
+                    <h3 class="card-number">@ViewBag.GenreCount</h3>
+                </div>
+                <i class="ri-folder-line card-icon"></i>
+            </div>
+        </a>
+
+        <a href='@Url.Action("Stock", "Admin")' class="text-decoration-none">
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-title">Total Stock</p>
+                    <h3 class="card-number">@ViewBag.StockCount</h3>
+                </div>
+                <i class="ri-stock-line card-icon"></i>
+            </div>
+        </a>
+        <a href='@Url.Action("ContactMessagesList", "Admin")' class="text-decoration-none">
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-title">Total Contact</p>
+                    <h3 class="card-number">@ViewBag.ContactCount</h3>
+                </div>
+                <i class="ri-mail-line card-icon"></i>
+            </div>
+        </a>
+    </div>
+</body>
+</html>
